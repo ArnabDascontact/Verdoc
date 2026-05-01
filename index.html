@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VerDoc | Verified Doctor Intelligence</title>
+  <meta name="description" content="VerDoc provides a verified doctor intelligence preview with 600 free leads and premium access by request." />
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <style>
+    :root {
+      --bg:#060612;
+      --bg2:#090818;
+      --panel:rgba(14,15,27,.86);
+      --panel2:rgba(9,10,18,.96);
+      --line:rgba(180,170,255,.13);
+      --line2:rgba(255,255,255,.08);
+      --text:#f4f6ff;
+      --muted:#a0a7bf;
+      --accent:#8b5cf6;
+      --accent2:#c4b5fd;
+      --accent3:#6d28d9;
+      --green:#22c55e;
+      --amber:#f59e0b;
+      --red:#f87171;
+      --shadow:0 26px 60px rgba(0,0,0,.42);
+      --radius:22px;
+    }
+    * { box-sizing:border-box; }
+    html,body { margin:0; padding:0; min-height:100%; }
+    body {
+      color:var(--text);
+      font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(1100px 700px at 12% 0%, rgba(139,92,246,.20), transparent 42%),
+        radial-gradient(900px 520px at 92% 4%, rgba(196,181,253,.10), transparent 34%),
+        linear-gradient(180deg, #050611 0%, #060714 46%, #030409 100%);
+      overflow-x:hidden;
+      position:relative;
+    }
+    body::before {
+      content:"";
+      position:fixed;
+      inset:0;
+      background-image:url("logo-theme.png");
+      background-repeat:no-repeat;
+      background-position:center 120px;
+      background-size:min(86vw, 1120px);
+      opacity:.10;
+      filter:drop-shadow(0 0 36px rgba(139,92,246,.14));
+      pointer-events:none;
+      z-index:-2;
+    }
+    body::after {
+      content:"";
+      position:fixed;
+      inset:0;
+      background:linear-gradient(180deg, rgba(255,255,255,.03), transparent 20%, rgba(0,0,0,.18));
+      pointer-events:none;
+      z-index:-1;
+    }
+    a { color:var(--accent2); }
+    .wrap {
+      max-width:1440px;
+      margin:0 auto;
+      padding:22px;
+      position:relative;
+      z-index:1;
+    }
+    .topbar, .hero, .section, .card, .modal {
+      background:linear-gradient(180deg, rgba(14,15,27,.92), rgba(8,10,18,.96));
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(14px);
+    }
+    .topbar {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:16px;
+      padding:14px 18px;
+      margin-bottom:18px;
+    }
+    .brandmark {
+      display:flex;
+      align-items:center;
+      gap:14px;
+      min-width:0;
+    }
+    .brand-logo {
+      width:56px;
+      height:56px;
+      object-fit:contain;
+      flex:none;
+      display:block;
+      border-radius:16px;
+      filter:drop-shadow(0 12px 26px rgba(139,92,246,.28));
+    }
+    .brandcopy { display:flex; flex-direction:column; gap:4px; min-width:0; }
+    .brandcopy strong {
+      font-size:15px;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      line-height:1.1;
+    }
+    .brandcopy span {
+      font-size:12px;
+      color:var(--muted);
+      line-height:1.2;
+    }
+    .top-actions {
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:flex-end;
+    }
+    .pill {
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:10px 14px;
+      border-radius:999px;
+      background:rgba(139,92,246,.11);
+      border:1px solid rgba(196,181,253,.22);
+      color:#efe9ff;
+      font-size:13px;
+      backdrop-filter:blur(8px);
+      white-space:nowrap;
+    }
+    .ghost, input, select, button, textarea {
+      font:inherit;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background:var(--panel2);
+      color:var(--text);
+      padding:12px 14px;
+      outline:none;
+    }
+    input::placeholder, textarea::placeholder { color:#7382a0; }
+    input:focus, select:focus, textarea:focus {
+      border-color:rgba(196,181,253,.65);
+      box-shadow:0 0 0 3px rgba(139,92,246,.14);
+    }
+    button { cursor:pointer; transition:.15s transform,.15s opacity,.15s background,.15s filter; }
+    button:hover { transform:translateY(-1px); }
+    .primary {
+      background:linear-gradient(135deg, var(--accent), var(--accent3));
+      border:none;
+      color:white;
+      font-weight:800;
+      box-shadow:0 16px 30px rgba(139,92,246,.22);
+    }
+    .primary:hover { filter:brightness(1.06); }
+    .secondary {
+      background:rgba(255,255,255,.02);
+      border:1px solid var(--line);
+      color:var(--text);
+    }
+    .mini {
+      padding:9px 12px;
+      border-radius:999px;
+      font-size:13px;
+      font-family:inherit;
+      white-space:nowrap;
+    }
+
+    .hero {
+      display:grid;
+      grid-template-columns:minmax(0,1.22fr) minmax(320px,.78fr);
+      gap:18px;
+      padding:24px;
+      position:relative;
+      overflow:hidden;
+    }
+    .hero::after {
+      content:"";
+      position:absolute;
+      inset:0;
+      background:radial-gradient(920px 380px at 22% 16%, rgba(139,92,246,.16), transparent 55%);
+      pointer-events:none;
+    }
+    .hero-copy, .hero-side { position:relative; z-index:1; }
+    .eyebrow {
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid rgba(196,181,253,.22);
+      background:rgba(139,92,246,.10);
+      color:#f3eeff;
+      font-size:12px;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      font-weight:700;
+    }
+    .hero h1 {
+      margin:12px 0 12px;
+      font-size:clamp(30px,4vw,48px);
+      line-height:1.02;
+      letter-spacing:-.045em;
+    }
+    .hero p {
+      margin:0;
+      color:var(--muted);
+      max-width:860px;
+      line-height:1.65;
+      font-size:16px;
+    }
+    .hero-cta {
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:20px;
+      align-items:center;
+    }
+    .hero-side {
+      display:grid;
+      gap:14px;
+      align-content:start;
+    }
+    .hero-panel {
+      padding:18px;
+      border-radius:24px;
+      border:1px solid var(--line);
+      background:rgba(7,8,15,.72);
+      backdrop-filter:blur(14px);
+    }
+    .hero-panel .k {
+      font-size:12px;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      color:var(--muted);
+      margin-bottom:8px;
+    }
+    .hero-panel .v {
+      font-size:22px;
+      font-weight:800;
+      letter-spacing:-.03em;
+      word-break:break-word;
+    }
+    .hero-panel .s {
+      font-size:13px;
+      color:var(--muted);
+      margin-top:6px;
+      line-height:1.5;
+    }
+    .tagrow { display:flex; gap:8px; flex-wrap:wrap; margin-top:12px; }
+    .tag {
+      font-size:12px;
+      padding:7px 10px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(12,14,24,.92);
+      color:#d7def0;
+    }
+
+    .grid { display:grid; gap:18px; margin-top:18px; }
+    .cards {
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:14px;
+    }
+    .card { padding:16px; }
+    .card .k { color:var(--muted); font-size:13px; margin-bottom:8px; }
+    .card .v { font-size:24px; font-weight:800; letter-spacing:-.02em; }
+    .card .s { font-size:12px; color:var(--muted); margin-top:4px; line-height:1.45; }
+
+    .section { padding:18px; }
+    .section h2, .section h3 { margin:0 0 10px; }
+    .section h2 { font-size:22px; }
+    .section p.lead { margin:0; color:var(--muted); line-height:1.6; }
+    .subgrid {
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:14px;
+      margin-top:14px;
+    }
+    .offer {
+      padding:18px;
+      border-radius:20px;
+      border:1px solid rgba(196,181,253,.16);
+      background:linear-gradient(180deg, rgba(12,14,24,.96), rgba(7,8,15,.92));
+    }
+    .offer .price {
+      font-size:30px;
+      font-weight:900;
+      letter-spacing:-.04em;
+      margin:4px 0 8px;
+    }
+    .offer ul {
+      margin:12px 0 0;
+      padding:0 0 0 18px;
+      color:var(--muted);
+      line-height:1.7;
+    }
+    .offer .cta {
+      margin-top:14px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .toolbar {
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+      margin-top:18px;
+    }
+    .toolbar .left, .toolbar .right {
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    .searchbar { min-width:min(100%,360px); flex:1; }
+    .filters {
+      display:grid;
+      grid-template-columns:1.4fr repeat(4,minmax(150px,.8fr)) minmax(180px, .9fr);
+      gap:12px 14px;
+      align-items:end;
+      margin-top:14px;
+    }
+    .field { display:flex; flex-direction:column; gap:8px; margin:0; }
+    label {
+      font-size:12px;
+      color:var(--muted);
+      text-transform:uppercase;
+      letter-spacing:.08em;
+    }
+    .banner {
+      margin-top:14px;
+      padding:14px 16px;
+      border-radius:18px;
+      border:1px solid rgba(196,181,253,.20);
+      background:linear-gradient(135deg, rgba(139,92,246,.14), rgba(10,12,22,.88));
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .banner strong { font-size:15px; }
+    .banner .small {
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.5;
+    }
+
+    .table-wrap {
+      margin-top:14px;
+      overflow:auto;
+      border:1px solid var(--line);
+      border-radius:18px;
+    }
+    table {
+      width:100%;
+      border-collapse:collapse;
+      min-width:1020px;
+      background:rgba(3,8,18,.14);
+    }
+    th, td {
+      padding:14px 12px;
+      border-bottom:1px solid rgba(31,49,75,.75);
+      text-align:left;
+      vertical-align:top;
+    }
+    th {
+      position:sticky;
+      top:0;
+      z-index:2;
+      background:#0b1324;
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      color:#a4b3d0;
+    }
+    td small { color:var(--muted); }
+    .status {
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 14px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:800;
+      letter-spacing:.01em;
+      transition:transform .15s ease, box-shadow .15s ease, filter .15s ease;
+      white-space:nowrap;
+    }
+    .status:hover { transform:translateY(-1px); box-shadow:0 10px 24px rgba(255,255,255,.08); }
+    .st-free {
+      background:rgba(34,197,94,.12);
+      color:#ebfff0;
+      border:1px solid rgba(34,197,94,.22);
+    }
+    .st-locked {
+      background:rgba(245,158,11,.12);
+      color:#ffe7b7;
+      border:1px solid rgba(245,158,11,.24);
+    }
+    .st-verified {
+      background:linear-gradient(180deg, rgba(196,181,253,.16), rgba(139,92,246,.12));
+      color:#ffffff;
+      border:1px solid rgba(255,255,255,.14);
+    }
+    .actions { display:flex; gap:8px; flex-wrap:wrap; }
+    .unlock-btn {
+      background:linear-gradient(135deg, #7f1d1d, #ef4444);
+      border:none;
+      color:white;
+      font-weight:800;
+    }
+    .unlock-btn:hover { filter:brightness(1.04); }
+    .copy-btn {
+      background:transparent;
+      border:1px solid rgba(196,181,253,.38);
+      color:#efe9ff;
+      font-weight:600;
+    }
+    .copy-btn:hover { background:rgba(139,92,246,.08); }
+    .email {
+      font-family:Calibri, "Segoe UI", Arial, sans-serif;
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid transparent;
+      word-break:break-all;
+      font-weight:700;
+      letter-spacing:.01em;
+      white-space:nowrap;
+    }
+    .email.revealed {
+      background:rgba(34,197,94,.10);
+      border-color:rgba(34,197,94,.22);
+      color:#d9ffe5;
+    }
+    .email.locked {
+      background:rgba(239,68,68,.10);
+      border-color:rgba(239,68,68,.24);
+      color:#ffb6b6;
+    }
+    .email.hidden {
+      background:rgba(245,158,11,.12);
+      border-color:rgba(245,158,11,.28);
+      color:#ffdca0;
+    }
+    .flag { display:inline-block; margin-right:8px; font-size:1.05em; vertical-align:baseline; }
+
+    .footer {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      flex-wrap:wrap;
+      margin:14px 2px 0;
+      color:var(--muted);
+      font-size:13px;
+    }
+    .pager { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+    .pager button { min-width:40px; }
+
+    .bottom-grid {
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:18px;
+      margin-top:18px;
+    }
+    .note-box {
+      padding:18px;
+      border-radius:20px;
+      border:1px solid rgba(196,181,253,.16);
+      background:linear-gradient(180deg, rgba(12,14,24,.96), rgba(7,8,15,.92));
+      line-height:1.6;
+      color:var(--muted);
+    }
+
+    .modal-backdrop {
+      position:fixed;
+      inset:0;
+      background:rgba(1,4,10,.72);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+      z-index:50;
+    }
+    .modal {
+      width:min(780px,100%);
+      padding:20px;
+    }
+    .modal h2 { margin:0 0 10px; font-size:24px; font-weight:800; }
+    .modal p {
+      color:var(--muted);
+      line-height:1.65;
+      font-family:Calibri, "Segoe UI", Arial, sans-serif;
+    }
+    .modal .row { display:flex; gap:10px; flex-wrap:wrap; margin-top:14px; }
+    .modal .form {
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+      margin-top:12px;
+    }
+    .modal .form .full { grid-column:1 / -1; }
+    .copy-note { font-size:12px; color:var(--muted); margin-top:10px; }
+    .toast{
+      position:fixed;
+      right:18px;
+      bottom:18px;
+      z-index:80;
+      padding:12px 14px;
+      border-radius:14px;
+      background:rgba(9,10,18,.96);
+      border:1px solid rgba(196,181,253,.22);
+      color:var(--text);
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(14px);
+      font-size:13px;
+      line-height:1.4;
+      max-width:min(92vw, 360px);
+      opacity:0;
+      transform:translateY(12px);
+      pointer-events:none;
+      transition:opacity .18s ease, transform .18s ease;
+    }
+    .toast.show{
+      opacity:1;
+      transform:translateY(0);
+    }
+    .muted { color:var(--muted); }
+    .hidden-row {
+      filter: saturate(.7);
+    }
+    .tiny {
+      font-size:12px;
+      color:var(--muted);
+      line-height:1.45;
+    }
+
+    @media (max-width: 1120px) {
+      .hero { grid-template-columns:1fr; }
+      .topbar { flex-direction:column; align-items:flex-start; }
+      .top-actions { width:100%; justify-content:flex-start; }
+      .top-actions input { width:100%; max-width:none; min-width:0; }
+      .cards { grid-template-columns:repeat(2,minmax(0,1fr)); }
+      .subgrid { grid-template-columns:1fr; }
+      .filters { grid-template-columns:1fr 1fr; }
+      .filters .full { grid-column:1 / -1; }
+      .bottom-grid { grid-template-columns:1fr; }
+      .modal .form { grid-template-columns:1fr; }
+    }
+    @media (max-width: 760px) {
+      .wrap { padding:14px; }
+      .cards { grid-template-columns:1fr; }
+      .filters { grid-template-columns:1fr; }
+      .pill { white-space:normal; }
+      .hero h1 { font-size:28px; }
+      table { min-width:900px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="topbar">
+      <div class="brandmark">
+        <img src="logo-mark.png" alt="VerDoc logo" class="brand-logo" />
+        <div class="brandcopy">
+          <strong>VerDoc</strong>
+          <span>Verified Doctor Intelligence • Public-source curation • No login</span>
+        </div>
+      </div>
+      <div class="top-actions">
+        <span class="pill" id="previewPill">100 preview leads per country</span>
+        <span class="pill" id="resultsPill">0 results</span>
+        <button class="secondary mini" id="jumpPricing">Pricing</button>
+        <button class="primary mini" id="openRequestTop">Request access</button>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="hero-copy">
+        <span class="eyebrow">Doctor intelligence platform</span>
+        <h1>Target the right doctors with verified, segmented healthcare data.</h1>
+        <p>
+          VerDoc gives you a curated public preview with up to 100 non-verified leads per country.
+          Filter by country, specialty, and organization, then request premium access for deeper segments.
+        </p>
+        <div class="hero-cta">
+          <button class="primary" id="scrollDirectory">Explore directory</button>
+          <button class="secondary" id="scrollPricing">View pricing</button>
+          <button class="secondary" id="openRequestHero">Request custom segment</button>
+        </div>
+        <div class="tagrow">
+          <span class="tag">Manually verified</span>
+          <span class="tag">Specialty filters</span>
+          <span class="tag">EU + USA coverage</span>
+          <span class="tag">No bulk export of premium data</span>
+        </div>
+      </div>
+      <div class="hero-side">
+        <div class="hero-panel">
+          <div class="k">Coverage</div>
+          <div class="v" id="coverageValue">—</div>
+          <div class="s">Total records in your directory with country, specialty, organization, and email fields.</div>
+        </div>
+        <div class="hero-panel">
+          <div class="k">Access model</div>
+          <div class="v">100 preview leads per country</div>
+          <div class="s">Verified leads are locked everywhere. The preview shows up to 100 non-verified leads per country, and premium access is handled by request.</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="grid">
+      <section class="cards">
+        <div class="card">
+          <div class="k">Total records</div>
+          <div class="v" id="totalCount">0</div>
+          <div class="s">Complete directory size loaded locally in the browser.</div>
+        </div>
+        <div class="card">
+          <div class="k">Free preview</div>
+          <div class="v" id="freeCount">0</div>
+          <div class="s">Visible without any login or signup.</div>
+        </div>
+        <div class="card">
+          <div class="k">Verified profiles</div>
+          <div class="v" id="verifiedCount">0</div>
+          <div class="s">Marked in the dataset as verified and locked contacts.</div>
+        </div>
+        <div class="card">
+          <div class="k">Countries covered</div>
+          <div class="v" id="countryCount">0</div>
+          <div class="s">Current country coverage in this bundle.</div>
+        </div>
+      </section>
+
+      <section class="section" id="pricing">
+        <h2>Simple request-based pricing</h2>
+        <p class="lead">Keep the free preview public, then charge for broader access and custom segments.</p>
+        <div class="subgrid">
+          <div class="offer">
+            <span class="tag">Starter</span>
+            <div class="price">200 contacts</div>
+            <p class="lead">Best for testing a niche segment.</p>
+            <ul>
+              <li>Country + specialty targeting</li>
+              <li>Manual premium delivery</li>
+              <li>Perfect for first buyers</li>
+            </ul>
+            <div class="cta">
+              <button class="primary mini open-segment" data-segment="200 contacts">Request this pack</button>
+            </div>
+          </div>
+          <div class="offer">
+            <span class="tag">Growth</span>
+            <div class="price">500 contacts</div>
+            <p class="lead">Good for active outreach and research teams.</p>
+            <ul>
+              <li>Segmented by region and specialty</li>
+              <li>Priority handling</li>
+              <li>Most popular option</li>
+            </ul>
+            <div class="cta">
+              <button class="primary mini open-segment" data-segment="500 contacts">Request this pack</button>
+            </div>
+          </div>
+          <div class="offer">
+            <span class="tag">Enterprise</span>
+            <div class="price">Custom segment</div>
+            <p class="lead">For larger requests and recurring needs.</p>
+            <ul>
+              <li>Custom country lists</li>
+              <li>Specialty bundles</li>
+              <li>Volume pricing by request</li>
+            </ul>
+            <div class="cta">
+              <button class="primary mini open-segment" data-segment="custom segment">Request custom segment</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="directory">
+        <div class="toolbar">
+          <div class="left">
+            <h2 style="margin:0;">Doctor directory</h2>
+            <span class="pill" id="rowsPill">0 rows</span>
+          </div>
+          <div class="right">
+            <button class="secondary mini" id="exportBtn">Export preview CSV</button>
+          </div>
+        </div>
+
+        <div class="banner">
+          <div>
+            <strong>Preview mode is limited.</strong>
+            <div class="small">Use the table below to browse the public preview. Verified records stay locked everywhere, and only non-verified rows are available in preview.</div>
+          </div>
+          <div class="small" id="previewSummary">Free preview includes up to 100 non-verified leads per country. Verified records stay locked in every country and specialty.</div>
+        </div>
+
+        <div class="filters">
+          <div class="field full">
+            <label for="search">Search</label>
+            <input id="search" class="searchbar" type="search" placeholder="Search name, specialty, organization, or email" />
+          </div>
+          <div class="field">
+            <label for="country">Country</label>
+            <select id="country"></select>
+          </div>
+          <div class="field">
+            <label for="specialty">Specialty</label>
+            <select id="specialty"></select>
+          </div>
+          <div class="field">
+            <label for="access">Access</label>
+            <select id="access">
+              <option value="all">All</option>
+              <option value="free">Free preview</option>
+              <option value="locked">Locked</option>
+              <option value="verified">Verified locked</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="sort">Sort</label>
+            <select id="sort">
+              <option value="priority">Priority</option>
+              <option value="name">Name</option>
+              <option value="country">Country</option>
+              <option value="specialty">Specialty</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="pageSize">Page size</label>
+            <select id="pageSize">
+              <option>20</option>
+              <option selected>25</option>
+              <option>50</option>
+              <option>100</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Contact</th>
+                <th>Organization</th>
+                <th>Country</th>
+                <th>Status</th>
+                <th>Email</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="tbody"></tbody>
+          </table>
+        </div>
+
+        <div class="footer">
+          <div id="pageInfo">Page 1 of 1</div>
+          <div class="pager" id="pager"></div>
+        </div>
+      </section>
+
+      <div class="bottom-grid">
+        <section class="section">
+          <h3>How VerDoc works</h3>
+          <p class="lead">Keep the public preview open, and route premium demand into a direct request flow.</p>
+          <div class="note-box">
+            1. Browse the free preview without login.<br>
+            2. Filter by country, specialty, and organization.<br>
+            3. Click a locked segment or pricing card.<br>
+            4. Send a request with your use case and volume.<br>
+            5. Deliver premium access manually or through your own backend later.
+          </div>
+        </section>
+
+        <section class="section">
+          <h3>Usage note</h3>
+          <div class="note-box">
+            VerDoc is positioned as a professional healthcare intelligence directory built from publicly sourced information.
+            Users should ensure their use complies with applicable privacy, communication, and data-protection laws.
+            The site avoids a login wall, keeps the free preview limited to 100 non-verified leads per country, and uses request-based access for premium data.
+          </div>
+        </section>
+      </div>
+
+      <section class="section" id="terms">
+        <h3>Terms and Conditions</h3>
+        <p class="lead">
+          By using VerDoc, you agree to the terms below. This page provides a public preview of professional healthcare contacts compiled from publicly available sources.
+          Verified records remain locked, preview data is limited, and access to broader segments is handled by request.
+        </p>
+        <div class="note-box">
+          <strong>Public-source information.</strong> VerDoc curates professional data from publicly available sources and does not guarantee that every record is complete, current, or error-free.<br><br>
+          <strong>Permitted use.</strong> Use the platform for lawful professional purposes only, such as research, recruiting, partnerships, and legitimate business outreach that complies with applicable rules.<br><br>
+          <strong>Prohibited use.</strong> No scraping, bulk downloading, redistribution, resale, harassment, or spam is allowed. Do not use the data in a way that violates communication, privacy, or data-protection laws.<br><br>
+          <strong>User responsibility.</strong> You are responsible for reviewing and complying with all laws, policies, and internal approvals that apply to your use of the data.<br><br>
+          <strong>No warranty.</strong> VerDoc is provided “as is” and “as available.” We do not promise that the data will be complete, uninterrupted, or suitable for every purpose.<br><br>
+          <strong>Corrections and contact.</strong> If you believe a record is inaccurate or should be reviewed, contact us at <a href="mailto:arnabdascontact@gmail.com">arnabdascontact@gmail.com</a>.
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" aria-live="polite" aria-atomic="true"></div>
+
+  <div class="modal-backdrop" id="modalBackdrop" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <h2 id="modalTitle">Request access</h2>
+      <p id="modalText">Send a request for premium access. The form opens a pre-filled email, so you can keep everything direct and simple.</p>
+      <form class="form" id="requestForm">
+        <div>
+          <label for="reqName">Name</label>
+          <input id="reqName" name="name" type="text" placeholder="Your name" required />
+        </div>
+        <div>
+          <label for="reqCompany">Company</label>
+          <input id="reqCompany" name="company" type="text" placeholder="Company name" required />
+        </div>
+        <div>
+          <label for="reqEmail">Work email</label>
+          <input id="reqEmail" name="email" type="email" placeholder="name@company.com" required />
+        </div>
+        <div>
+          <label for="reqSegment">Requested segment</label>
+          <input id="reqSegment" name="segment" type="text" placeholder="500 contacts" />
+        </div>
+        <div class="full">
+          <label for="reqUseCase">Use case</label>
+          <select id="reqUseCase" name="usecase">
+            <option>Recruitment</option>
+            <option>Pharma outreach</option>
+            <option>Market research</option>
+            <option>Partnerships</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="full">
+          <label for="reqNotes">Notes</label>
+          <textarea id="reqNotes" name="notes" rows="5" placeholder="Tell us your target country, specialty, and volume."></textarea>
+        </div>
+      </form>
+      <div class="row">
+        <button class="primary mini" id="sendRequest">Send request email</button>
+        <button class="secondary mini" id="closeModal">Close</button>
+      </div>
+      <div class="copy-note">No login required. Premium access can still be fulfilled manually from this request flow.</div>
+    </div>
+  </div>
+
+  <script src="doctor_data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
